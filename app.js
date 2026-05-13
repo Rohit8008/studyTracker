@@ -40,7 +40,7 @@ function buildMarkdownEditor({ value = '', placeholder = 'Write notes in markdow
     <button data-action="block"   title="Code block"              class="md-tool">&#96;&#96;&#96;</button>
     <button data-action="ul"      title="Bullet list"             class="md-tool">• List</button>
     <button data-action="heading" title="Heading"                 class="md-tool">H</button>
-    <button data-action="bold"    title="Separator" class="md-tool-sep"></button>
+    <button data-action="sep"     title="Separator" class="md-tool-sep"></button>
     <button data-action="quote"   title="Blockquote"             class="md-tool">&gt; Quote</button>
   `;
 
@@ -58,7 +58,6 @@ function buildMarkdownEditor({ value = '', placeholder = 'Write notes in markdow
     ta.style.height = Math.max(ta.scrollHeight, rows * 22) + 'px';
   };
   ta.addEventListener('input', () => { autoResize(); if (onChange) onChange(ta.value); });
-  setTimeout(autoResize, 0);
 
   // Preview pane
   const preview = document.createElement('div');
@@ -122,6 +121,9 @@ function buildMarkdownEditor({ value = '', placeholder = 'Write notes in markdow
 
   wrap.getValue = () => ta.value;
   wrap.setValue = (v) => { ta.value = v; autoResize(); };
+  // Call mount() once after the editor element is inserted into the DOM
+  // so that autoResize can measure scrollHeight correctly.
+  wrap.mount = () => requestAnimationFrame(autoResize);
 
   return wrap;
 }
@@ -129,6 +131,12 @@ function buildMarkdownEditor({ value = '', placeholder = 'Write notes in markdow
 //  13. Utilities
 //  14. Bootstrap
 // ============================================================
+
+// ─── Problem Notes Editor Registry ──────────────────────────
+// Maps problemId → mdEditor DOM element (the wrap returned by buildMarkdownEditor).
+// Populated in buildNotesPanel so saveNotesPanel can retrieve getValue() reliably
+// without depending on querySelector returning the same object reference.
+const NOTES_EDITORS = new Map();
 
 // ─── 1. State ───────────────────────────────────────────────
 const APP = {
@@ -219,7 +227,9 @@ document.getElementById('btn-sync').addEventListener('click', () => doSave());
 function closeSidebar() {
   document.getElementById('sidebar').classList.remove('sidebar-open');
   document.getElementById('sidebar-overlay').classList.add('hidden');
-  document.getElementById('btn-hamburger').setAttribute('aria-expanded', 'false');
+  const btnHamburger = document.getElementById('btn-hamburger');
+  btnHamburger.classList.remove('open');
+  btnHamburger.setAttribute('aria-expanded', 'false');
 }
 
 (function () {
@@ -229,6 +239,7 @@ function closeSidebar() {
   btn.addEventListener('click', () => {
     const open = sidebar.classList.toggle('sidebar-open');
     overlay.classList.toggle('hidden', !open);
+    btn.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', String(open));
   });
   overlay.addEventListener('click', closeSidebar);
@@ -264,14 +275,17 @@ document.getElementById('sidebar-search').addEventListener('input', function () 
 // ── Keyboard shortcuts ───────────────────────────────────────
 document.addEventListener('keydown', (e) => {
   const tag = document.activeElement.tagName;
-  if (tag === 'TEXTAREA' || tag === 'INPUT') return;
 
-  // Ctrl/Cmd + S → sync
+  // Ctrl/Cmd + S → sync — works even when focus is inside a textarea or input
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
     doSave();
     return;
   }
+
+  // All shortcuts below do not apply when typing in an input or textarea
+  if (tag === 'TEXTAREA' || tag === 'INPUT') return;
+
   // Escape → close any open note panel
   if (e.key === 'Escape') {
     document.querySelectorAll('.problem-notes-panel.open').forEach(p => p.classList.remove('open'));
@@ -408,7 +422,14 @@ function buildSidebarDayItem(dayData) {
     document.querySelectorAll('.sidebar-day-item').forEach(el => el.classList.remove('active'));
     item.classList.add('active');
     APP.activeTab = 'today';
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'today'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      const isToday = b.dataset.tab === 'today';
+      b.classList.toggle('active', isToday);
+      b.setAttribute('aria-selected', String(isToday));
+    });
+    document.getElementById('day-view').classList.remove('hidden');
+    document.getElementById('all-problems-view').classList.add('hidden');
+    document.getElementById('dsa-notes-view').classList.add('hidden');
     renderDayView(dayData.day);
   });
 
@@ -434,6 +455,9 @@ function renderDayView(dayNum) {
   APP.currentDay = dayNum; // track viewed day (not just "current")
   const dayData = CHECKLIST_DATA[dayNum - 1];
   const dp      = getDayProgress(dayNum);
+
+  // Clear stale editor references from the previous day's panels
+  NOTES_EDITORS.clear();
 
   const container = document.getElementById('day-view');
   container.innerHTML = '';
@@ -645,7 +669,10 @@ function buildChecklistCard(title, type, items, dp) {
     noteBtn.addEventListener('click', (e) => {
       e.preventDefault();
       notePanel.classList.toggle('hidden');
-      if (!notePanel.classList.contains('hidden')) ta.focus();
+      if (!notePanel.classList.contains('hidden')) {
+        mdEditor.mount();
+        mdEditor.querySelector('.md-textarea').focus();
+      }
     });
 
     list.appendChild(wrapper);
@@ -671,6 +698,7 @@ function buildDayNotesCard(dayNum, dp) {
     onChange:    (val) => { dp.notes = val; scheduleSave(); },
   });
   card.appendChild(editor);
+  editor.mount();
 
   return card;
 }
@@ -821,6 +849,8 @@ function buildNotesPanel(problem, dp, dayNum) {
     rows:        4,
   });
   editorSlot.appendChild(mdEditor);
+  mdEditor.mount();
+  NOTES_EDITORS.set(problem.id, mdEditor);
 
   // Review button selection
   panel.querySelectorAll('.review-btn').forEach(btn => {
@@ -848,8 +878,8 @@ function saveNotesPanel(problemId, dayNum, dp) {
   const panel    = document.getElementById(`notes-panel-${problemId}`);
   const pattern  = document.getElementById(`np-pattern-${problemId}`)?.value.trim() || '';
   const timeMin  = parseInt(document.getElementById(`np-time-${problemId}`)?.value) || 0;
-  const editorEl = document.querySelector(`#np-editor-${problemId} .md-editor`);
-  const noteText = editorEl?.getValue?.() || '';
+  const mdEditor = NOTES_EDITORS.get(problemId);
+  const noteText = mdEditor ? mdEditor.getValue() : '';
   const selBtn   = panel?.querySelector('.review-btn.selected');
   const review   = selBtn?.dataset.val || '';
 
@@ -1208,17 +1238,15 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     const tab = btn.dataset.tab;
     APP.activeTab = tab;
 
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.toggle('active', b === btn);
+      b.setAttribute('aria-selected', String(b === btn));
+    });
     document.getElementById('day-view').classList.toggle('hidden', tab !== 'today');
     document.getElementById('all-problems-view').classList.toggle('hidden', tab !== 'problems');
     document.getElementById('dsa-notes-view').classList.toggle('hidden', tab !== 'patterns');
 
     if (tab === 'problems') renderAllProblemsTab();
-
-    // Re-sync sidebar active for today tab
-    if (tab === 'today') {
-      // keep current day selected
-    }
   });
 });
 
