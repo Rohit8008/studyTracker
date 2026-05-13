@@ -551,16 +551,19 @@ ul { list-style: none; }
 
 /* ── Theory / Review Row ───────────────────────────────────── */
 .checklist-list { padding: 0; }
+
+.checklist-item-wrapper {
+  border-bottom: 1px solid var(--border-light);
+}
+.checklist-item-wrapper:last-child { border-bottom: none; }
+
 .checklist-item {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   padding: 9px 16px;
-  border-bottom: 1px solid var(--border-light);
-  cursor: pointer;
   transition: background .1s;
 }
-.checklist-item:last-child { border-bottom: none; }
 .checklist-item:hover { background: rgba(255,255,255,.02); }
 .checklist-item input[type=checkbox] {
   margin-top: 2px;
@@ -568,12 +571,74 @@ ul { list-style: none; }
   accent-color: var(--accent);
   cursor: pointer;
 }
+.checklist-label {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.5;
+  flex: 1;
+  cursor: pointer;
+}
+.checklist-item.done .checklist-label { color: var(--text-muted); text-decoration: line-through; }
 .checklist-item span {
   font-size: 12px;
   color: var(--text-primary);
   line-height: 1.5;
 }
 .checklist-item.done span { color: var(--text-muted); text-decoration: line-through; }
+
+.item-note-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  padding: 2px 7px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.item-note-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.item-note-panel {
+  padding: 0 16px 12px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item-note-panel.hidden { display: none; }
+
+.item-note-textarea {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 8px 10px;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.item-note-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.item-note-save {
+  align-self: flex-end;
+  background: var(--accent);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.item-note-save:hover { opacity: .85; }
 
 /* ── Day Notes Card ────────────────────────────────────────── */
 .day-notes-card textarea {

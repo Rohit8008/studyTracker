@@ -115,6 +115,7 @@ function buildInitialProgress() {
         },
         notes:        '',
         problemNotes: {},
+        itemNotes:    {},
       },
     },
   };
@@ -128,7 +129,11 @@ function getDayProgress(dayNum) {
       completed:    { dsa: [], theory: [], review: [] },
       notes:        '',
       problemNotes: {},
+      itemNotes:    {},
     };
+  }
+  if (!APP.progress.days[key].itemNotes) {
+    APP.progress.days[key].itemNotes = {};
   }
   return APP.progress.days[key];
 }
@@ -389,22 +394,67 @@ function buildChecklistCard(title, type, items, dp) {
 
   items.forEach(item => {
     const isComplete = dp.completed[type].includes(item.id);
-    const el = document.createElement('label');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'checklist-item-wrapper';
+
+    const el = document.createElement('div');
     el.className = `checklist-item${isComplete ? ' done' : ''}`;
-    el.htmlFor = `chk-${item.id}`;
 
     const cb = document.createElement('input');
     cb.type    = 'checkbox';
     cb.id      = `chk-${item.id}`;
     cb.checked = isComplete;
     cb.addEventListener('change', () => toggleChecklist(dp, type, item.id, cb.checked, el, card.querySelector('.badge')));
+
+    const labelEl = document.createElement('label');
+    labelEl.htmlFor = `chk-${item.id}`;
+    labelEl.className = 'checklist-label';
+    labelEl.textContent = item.text;
+
+    const noteBtn = document.createElement('button');
+    noteBtn.className = 'item-note-btn';
+    const savedNote = dp.itemNotes[item.id] || '';
+    noteBtn.textContent = savedNote ? '📝' : '+ note';
+    noteBtn.title = 'Add notes for this item';
+
     el.appendChild(cb);
+    el.appendChild(labelEl);
+    el.appendChild(noteBtn);
+    wrapper.appendChild(el);
 
-    const span = document.createElement('span');
-    span.textContent = item.text;
-    el.appendChild(span);
+    // Inline notes panel
+    const notePanel = document.createElement('div');
+    notePanel.className = 'item-note-panel hidden';
 
-    list.appendChild(el);
+    const ta = document.createElement('textarea');
+    ta.className = 'item-note-textarea';
+    ta.placeholder = 'Write your notes, key insights, or questions here…';
+    ta.value = savedNote;
+    ta.rows = 3;
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'item-note-save';
+    saveBtn.textContent = 'Save note';
+
+    saveBtn.addEventListener('click', () => {
+      dp.itemNotes[item.id] = ta.value.trim();
+      noteBtn.textContent = ta.value.trim() ? '📝' : '+ note';
+      notePanel.classList.add('hidden');
+      scheduleSave();
+    });
+
+    notePanel.appendChild(ta);
+    notePanel.appendChild(saveBtn);
+    wrapper.appendChild(notePanel);
+
+    noteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      notePanel.classList.toggle('hidden');
+      if (!notePanel.classList.contains('hidden')) ta.focus();
+    });
+
+    list.appendChild(wrapper);
   });
 
   card.appendChild(list);
