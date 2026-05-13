@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rohit Mittal — Resume</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 11pt;
+    color: #000;
+    background: #fff;
+    padding: 0.6in 0.7in;
+    max-width: 8.5in;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 6px; }
+  .header h1 { font-size: 24pt; font-weight: bold; letter-spacing: 1px; }
+  .header .contact {
+    font-size: 10pt;
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .header .contact a { color: #000; text-decoration: underline; }
+
+  /* ── SECTION ── */
+  section { margin-top: 10px; }
+  .section-title {
+    font-size: 11pt;
+    font-variant: small-caps;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 1px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  /* ── TWO-COL ROW (org + location / role + date) ── */
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .row .left { font-weight: bold; }
+  .row .right { font-size: 10.5pt; white-space: nowrap; }
+  .row-sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 1px;
+    margin-bottom: 3px;
+  }
+  .row-sub .left { font-style: italic; font-size: 10.5pt; }
+  .row-sub .right { font-style: italic; font-size: 10.5pt; white-space: nowrap; }
+
+  /* ── BULLET LIST ── */
+  ul { padding-left: 18px; margin: 3px 0; }
+  ul li { font-size: 10.5pt; margin-bottom: 3px; line-height: 1.35; }
+
+  /* ── SKILLS TABLE ── */
+  .skills-table { padding-left: 4px; }
+  .skills-table p { font-size: 10.5pt; margin-bottom: 3px; line-height: 1.35; }
+
+  /* ── PROJECT HEADING ── */
+  .project-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3px;
+  }
+  .project-row .proj-title { font-size: 10.5pt; }
+  .project-row .proj-date { font-size: 10.5pt; white-space: nowrap; }
+
+  /* ── ENTRY SPACING ── */
+  .entry { margin-bottom: 7px; }
+  .project-entry { margin-bottom: 7px; }
+
+  /* ── PRINT ── */
+  @media print {
+    body { padding: 0.5in 0.6in; }
+    a { color: #000; }
+  }
+
+  code {
+    font-family: "Courier New", monospace;
+    font-size: 9.5pt;
+    background: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+
+  <h1>Rohit Mittal</h1>
+  <div class="contact">
+    <span>+91-6283930283</span>
+    <span>|</span>
+    <a href="mailto:mittalrohit701@gmail.com">mittalrohit701@gmail.com</a>
+    <span>|</span>
+    <a href="https://linkedin.com/in/rohit8008">linkedin.com/in/rohit8008</a>
+    <span>|</span>
+    <a href="https://github.com/rohit8008">github.com/rohit8008</a>
+  </div>
+</div>
+
+<!-- EDUCATION -->
+<section>
+  <div class="section-title">Education</div>
+  <div class="entry">
+    <div class="row">
+      <span class="left">Chitkara University</span>
+      <span class="right">Rajpura, Punjab, India</span>
+    </div>
+    <div class="row-sub">
+      <span class="left">Bachelor of Engineering — Computer Science; GPA: 9.54</span>
+      <span class="right">July 2021 – June 2025</span>
+    </div>
+    <ul>
+      <li><strong>Relevant Courses:</strong> Data Structures &amp; Algorithms, Operating Systems, Databases, Computer Networks, Linux, Java</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section>
+  <div class="section-title">Skills Summary</div>
+  <div class="skills-table">
+    <p><strong>Languages:</strong> Java, JavaScript, SQL, C++</p>
+    <p><strong>Backend:</strong> Spring Boot, Spring Security, Spring Data JPA, Quarkus, Node.js, Express.js</p>
+    <p><strong>Frontend:</strong> Next.js, React.js, TypeScript, Tailwind CSS, Material UI</p>
+    <p><strong>Databases:</strong> MySQL, PostgreSQL, MS SQL Server, IBM DB2, Elasticsearch, Clickhouse, Redshift, DuckDB, Redis</p>
+    <p><strong>Messaging &amp; Caching:</strong> Apache Kafka, AWS SQS, Redis (Redisson), EHCache, HikariCP</p>
+    <p><strong>Cloud &amp; AWS:</strong> S3, Lambda, Secrets Manager, KMS, SQS, CodeArtifact, CloudWatch</p>
+    <p><strong>Libraries &amp; Tools:</strong> JasperReports, Apache POI, iText PDF, zip4j, LangChain4j, OpenTelemetry, ELK Stack</p>
+    <p><strong>DevOps &amp; Tools:</strong> Git, Maven, Jenkins, Docker, GraalVM, Swagger/OpenAPI</p>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section>
+  <div class="section-title">Experience</div>
+  <div class="entry">
+    <div class="row">
+      <span class="left">SalesCode.ai</span>
+      <span class="right">Gurugram, India</span>
+    </div>
+    <div class="row-sub">
+      <span class="left">Software Engineer</span>
+      <span class="right">July 2024 – Present</span>
+    </div>
+    <ul>
+      <li>
+        <strong>Built multi-tenant report microservice from scratch</strong> serving <strong>19+ enterprise LOBs (Lines of Business)</strong> in production; designed custom <code>AbstractRoutingDataSource</code> that selects the correct database per tenant dynamically from JWT claims — zero code changes required to onboard a new tenant.
+      </li>
+      <li>
+        <strong>Designed and published <code>reports-jar</code></strong> — a shared Maven library on <strong>AWS CodeArtifact</strong> housing <strong>88+ report types</strong> across tenants; built around a <code>StreamingProvider</code> pagination interface that handles <strong>100K+ row datasets without memory pressure</strong>, producing XLSX, PDF, CSV, and XML outputs.
+      </li>
+      <li>
+        <strong>Architected async task pipeline:</strong> <code>POST /tasks</code> → <strong>Apache Kafka</strong> → consumer → report generation → encrypted <strong>S3 upload</strong>; clients poll <code>GET /tasks/{id}</code> for completion, fully decoupling report generation from API threads and eliminating request timeouts on large jobs.
+      </li>
+      <li>
+        <strong>Offloaded PDF generation to AWS Lambda</strong> (<code>HtmlToPdfConverter</code>), isolating CPU-intensive HTML-to-PDF work from the main Tomcat thread pool (800 threads); configured Provisioned Concurrency to eliminate cold starts on user-facing requests.
+      </li>
+      <li>
+        <strong>Implemented KMS-backed at-rest file encryption</strong> for all generated reports; used <strong>versioned JWT secrets via AWS Secrets Manager</strong> — tokens embed the secret version ID, enabling zero-downtime key rotation without invalidating active user sessions.
+      </li>
+      <li>
+        <strong>Integrated multi-source query routing</strong> across <strong>MySQL, Clickhouse, Redshift, and Elasticsearch</strong> — data source selected per report type via metadata-driven <code>ReportInfo</code> config; used <strong>DuckDB</strong> as an embedded analytical engine for in-process cross-source joins with no network overhead.
+      </li>
+      <li>
+        <strong>Built batch downloads with AES-256 password-protected ZIP</strong> (zip4j); instrumented service with structured UUID-correlated logging via <strong>ELK Stack</strong>, <strong>OpenTelemetry</strong> tracing, and CORS rejection metrics for full production observability.
+      </li>
+      <li>
+        <strong>Built slake-reporting</strong> — a production-grade, multi-tenant data export engine on <strong>Java 21 + Quarkus</strong>; supports <strong>6 source databases</strong> (MySQL, PostgreSQL, Redshift, MS SQL Server, IBM DB2, custom JDBC) and <strong>6 sink destinations</strong> (S3, Redshift, MySQL, MSSQL, DB2, local filesystem) with streaming multi-query joins, spill-to-disk LRU indices, and parallel partitioned exports — handles large BI datasets with configurable 7-day subquery cache and 14-day join index TTL.
+      </li>
+      <li>
+        <strong>Implemented cron-based report scheduling</strong> with YAML-driven connector registry (post-export S3 upload, Redshift COPY, file-move); integrated <strong>LangChain4j + local embeddings</strong> for LLM-assisted report config generation; containerised with <strong>GraalVM JDK 24</strong> and deployed via Docker with OpenTelemetry OTLP observability.
+      </li>
+      <li>
+        <strong>Received Lead Performer rating for two consecutive quarters</strong> for end-to-end ownership and on-time delivery of the reports platform.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section>
+  <div class="section-title">Projects</div>
+
+  <div class="project-entry">
+    <div class="project-row">
+      <span class="proj-title"><strong>ChannelKart Reports Service</strong> | <em>Java 11, Spring Boot, Kafka, MySQL, Redis, EHCache, AWS, Elasticsearch</em></span>
+      <span class="proj-date"><em>Production</em></span>
+    </div>
+    <ul>
+      <li>Production microservice for async report generation on an FMCG distribution platform; uses a <code>ServiceLocator</code>-driven task dispatch system, JWT multi-tenant auth, and per-LOB EHCache (10-min TTL) + distributed Redis caching with event-based cross-instance invalidation.</li>
+      <li>Kafka consumer tuned with 10-min max poll interval and manual offset commit to handle long-running jobs without consumer group rebalancing; SQS used in parallel for AWS-native event routing.</li>
+    </ul>
+  </div>
+
+  <div class="project-entry">
+    <div class="project-row">
+      <span class="proj-title"><strong>Reports-JAR Shared Library</strong> | <em>Java 11, Maven, DuckDB, JasperReports, Apache POI, AWS Lambda, iText</em></span>
+      <span class="proj-date"><em>Production</em></span>
+    </div>
+    <ul>
+      <li>Standalone Maven library published to AWS CodeArtifact; encapsulates 88+ report types across 19 tenants behind a clean <code>AbstractReport</code> + <code>StreamingProvider</code> interface — adding a new report type or tenant requires zero changes to existing code.</li>
+      <li>Uses DuckDB as embedded analytical DB for cross-source joins; JasperReports for pixel-precise invoice PDFs vs. Apache POI <code>SXSSFWorkbook</code> streaming for large analytical exports.</li>
+    </ul>
+  </div>
+
+  <div class="project-entry">
+    <div class="project-row">
+      <span class="proj-title"><strong>Slake Reporting Engine</strong> | <em>Java 21, Quarkus 3, HikariCP, DuckDB, AWS S3/Secrets Manager, Redis, LangChain4j, Docker/GraalVM</em></span>
+      <span class="proj-date"><em>Production</em></span>
+    </div>
+    <ul>
+      <li>Multi-tenant data export engine (263 classes, 20+ REST endpoints) that extracts large BI datasets from 6 database types and routes them to 6 sink destinations; features row-level streaming with spill-to-disk join indices, named-parameter SQL with <code>LIST_*</code> expansion, incremental pointer tracking, and partitioned parallel exports (<code>--parallel N</code>).</li>
+      <li>Dual entry point: REST API (<code>/reports/run</code>, <code>/reports/download</code>, <code>/schedules</code>) and CLI via Picocli for batch execution; status tracked as NDJSON or JDBC sink; integrated LangChain4j with local MiniLM embeddings for LLM-assisted sink config generation; deployed on GraalVM JDK 24 Docker with OpenTelemetry OTLP logging.</li>
+    </ul>
+  </div>
+
+  <div class="project-entry">
+    <div class="project-row">
+      <span class="proj-title"><strong>MERN Food Ordering App</strong> | <em>React.js, TypeScript, Express.js, Node.js, Stripe, Cloudinary, MongoDB</em></span>
+      <span class="proj-date"><em>Personal</em></span>
+    </div>
+    <ul>
+      <li>Full-stack restaurant management system with Auth0 authentication, Stripe payment integration, real-time order tracking, search, filters, and cart management.</li>
+    </ul>
+  </div>
+
+  <div class="project-entry">
+    <div class="project-row">
+      <span class="proj-title"><strong>Blog Application</strong> | <em>React, Spring Boot, Spring Security, MySQL</em></span>
+      <span class="proj-date"><em>Personal</em></span>
+    </div>
+    <ul>
+      <li>Full-stack blogging platform with JWT-secured authentication, CRUD operations, personalized feeds, and Jodit rich text editor.</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section>
+  <div class="section-title">Achievements</div>
+  <ul>
+    <li><strong>Lead Performer Rating:</strong> Received the top performance rating at SalesCode.ai for two consecutive quarters.</li>
+    <li><strong>500+ Coding Problems Solved:</strong> LeetCode and GeeksforGeeks combined.</li>
+    <li><strong>Top 100 in College on GeeksforGeeks:</strong> Ranked among the top competitive programmers in the university.</li>
+    <li><strong>Phosphenes CodeWar Hackathon:</strong> Built a web app assisting farmers with agricultural challenges and weather forecasting.</li>
+  </ul>
+</section>
+
+<!-- VOLUNTEER -->
+<section>
+  <div class="section-title">Volunteer Experience</div>
+
+  <div class="entry">
+    <div class="row">
+      <span class="left">ACM Student Chapter Lead</span>
+      <span class="right">Chitkara University, India</span>
+    </div>
+    <div class="row-sub">
+      <span class="left">Community Lead</span>
+      <span class="right">Jan 2022 – Jan 2023</span>
+    </div>
+    <ul>
+      <li>Conducted technical and soft-skills workshops impacting <strong>3000+ students</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="row">
+      <span class="left">Technical Advisor — Google Developer Student Club</span>
+      <span class="right">Chitkara University, India</span>
+    </div>
+    <div class="row-sub">
+      <span class="left">Tech Fest Organizer</span>
+      <span class="right">Jan 2023 – Jan 2024</span>
+    </div>
+    <ul>
+      <li>Organized and delivered developer workshops reaching <strong>7000+ developers</strong>.</li>
+    </ul>
+  </div>
+
+</section>
+
+</body>
+</html>

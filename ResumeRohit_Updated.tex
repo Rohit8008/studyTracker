@@ -1,0 +1,197 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{multicol}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-2pt}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Rohit Mittal} \\ \vspace{4pt}
+    \small +91-6283930283 $|$
+    \href{mailto:mittalrohit701@gmail.com}{\underline{mittalrohit701@gmail.com}} $|$
+    \href{https://linkedin.com/in/rohit8008}{\underline{linkedin.com/in/rohit8008}} $|$
+    \href{https://github.com/rohit8008}{\underline{github.com/rohit8008}}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Chitkara University}{Rajpura, Punjab, India}
+      {Bachelor of Engineering -- Computer Science; GPA: 9.54}{July 2021 -- June 2025}
+    \resumeItemListStart
+        \resumeItem{\textbf{Relevant Courses:} Data Structures \& Algorithms, Operating Systems, Databases, Computer Networks, Linux, Java}
+    \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------SKILLS-----------
+\section{Skills Summary}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Java, JavaScript, SQL, C++} \\
+     \textbf{Backend}{: Spring Boot, Spring Security, Spring Data JPA, Node.js, Express.js} \\
+     \textbf{Frontend}{: Next.js, React.js, TypeScript, Tailwind CSS, Material UI} \\
+     \textbf{Databases}{: MySQL, Elasticsearch, Clickhouse, Redshift, DuckDB, Redis} \\
+     \textbf{Messaging \& Caching}{: Apache Kafka, AWS SQS, Redis (Redisson), EHCache} \\
+     \textbf{Cloud \& AWS}{: S3, Lambda, Secrets Manager, KMS, SQS, CodeArtifact, CloudWatch} \\
+     \textbf{Libraries \& Tools}{: JasperReports, Apache POI, iText PDF, zip4j, OpenTelemetry, ELK Stack} \\
+     \textbf{DevOps \& Tools}{: Git, Maven, Jenkins, Docker, Swagger/OpenAPI}
+    }}
+ \end{itemize}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {SalesCode.ai}{Gurugram, India}
+      {Software Engineer}{July 2024 -- Present}
+      \resumeItemListStart
+
+        \resumeItem{\textbf{Built multi-tenant report microservice from scratch} serving \textbf{19+ LOBs (Lines of Business)} in production; implemented custom \texttt{AbstractRoutingDataSource} that selects the correct database per tenant dynamically from JWT claims -- zero application code changes needed to onboard a new tenant.}
+
+        \resumeItem{\textbf{Designed and published \texttt{reports-jar}} -- a shared Maven library on \textbf{AWS CodeArtifact} housing \textbf{88+ report types} across tenants; built around a \texttt{StreamingProvider} pagination interface that generates reports of \textbf{100K+ rows without memory pressure}, with output formats including XLSX, PDF, CSV, XML.}
+
+        \resumeItem{\textbf{Architected async task pipeline}: \texttt{POST /tasks} $\rightarrow$ \textbf{Kafka} (\texttt{\{env\}-reports-stream}) $\rightarrow$ consumer $\rightarrow$ report generation $\rightarrow$ encrypted \textbf{S3 upload}; clients poll \texttt{GET /tasks/\{id\}} for completion -- decoupled report generation completely from API threads.}
+
+        \resumeItem{\textbf{Offloaded PDF generation to AWS Lambda} (\texttt{HtmlToPdfConverter}), isolating CPU-intensive HTML-to-PDF conversion from the main Tomcat thread pool (800 threads); configured \textbf{Provisioned Concurrency} to eliminate cold starts on user-facing report requests.}
+
+        \resumeItem{\textbf{Implemented KMS-backed at-rest file encryption} for all generated reports; used \textbf{versioned JWT secrets via AWS Secrets Manager} -- tokens embed the secret version ID, enabling \textbf{zero-downtime key rotation} without invalidating active user sessions.}
+
+        \resumeItem{\textbf{Integrated multi-source query routing} across \textbf{MySQL, Clickhouse, Redshift, and Elasticsearch} -- data source selected per report type via metadata-driven \texttt{ReportInfo} config, with \textbf{DuckDB} used as an in-process analytical engine for cross-source joins without network overhead.}
+
+        \resumeItem{\textbf{Implemented batch download with AES-256 password-protected ZIP} using zip4j; structured logging via \texttt{LoggingInterceptor} with UUID request correlation, \textbf{OpenTelemetry} tracing, and CORS rejection metrics shipped to \textbf{Elasticsearch} for full production observability.}
+
+        \resumeItem{\textbf{Received Lead Performer rating for two consecutive quarters} for ownership and delivery of the reports platform.}
+
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+
+      \resumeProjectHeading
+          {\textbf{ChannelKart Reports Service} $|$ \emph{Java 11, Spring Boot, Kafka, MySQL, Redis, EHCache, AWS, Elasticsearch}}{Production}
+          \resumeItemListStart
+            \resumeItem{Production microservice handling async report generation for an FMCG distribution platform; serves 19 enterprise clients with a \texttt{ServiceLocator}-driven task dispatch system, JWT-based multi-tenant auth, and per-LOB EHCache (10-min TTL) + distributed Redis caching with event-based invalidation.}
+            \resumeItem{Configured Tomcat for 800 threads with Kafka consumer tuned for 10-min max poll interval to handle long-running report jobs without consumer group rebalancing.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{Reports-JAR Shared Library} $|$ \emph{Java 11, Maven, DuckDB, JasperReports, Apache POI, AWS Lambda, iText}}{Production}
+          \resumeItemListStart
+            \resumeItem{Standalone Maven library published to \textbf{AWS CodeArtifact}; consumed by the reports service via standard dependency management. Encapsulates 88+ report type implementations across 19 tenants with a clean \texttt{AbstractReport} + \texttt{StreamingProvider} interface -- adding a new report type requires zero changes to existing code.}
+            \resumeItem{Uses \textbf{DuckDB} as an embedded analytical database for in-process cross-source joins, and \textbf{JasperReports} for pixel-precise invoice PDFs vs. Apache POI streaming (\texttt{SXSSFWorkbook}) for large data exports.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{MERN Food Ordering App} $|$ \emph{React.js, TypeScript, Express.js, Node.js, Stripe, MongoDB}}{Personal}
+          \resumeItemListStart
+            \resumeItem{Full-stack restaurant management system with Auth0 authentication, Stripe payment integration, real-time order tracking, search, filters, and cart management.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{Blog Application} $|$ \emph{React, Spring Boot, Spring Security, MySQL}}{Personal}
+          \resumeItemListStart
+            \resumeItem{Full-stack blogging platform with JWT-secured authentication, CRUD operations, personalized feeds, and Jodit rich text editor.}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+
+%-----------ACHIEVEMENTS-----------
+\section{Achievements}
+  \resumeSubHeadingListStart
+    \resumeItem{\textbf{Lead Performer Rating:} Received the top performance rating at SalesCode.ai for two consecutive quarters.}
+    \resumeItem{\textbf{500+ Coding Problems Solved:} LeetCode and GeeksforGeeks combined.}
+    \resumeItem{\textbf{Top 100 in College on GeeksforGeeks:} Ranked among the top competitive programmers in the university.}
+    \resumeItem{\textbf{Phosphenes CodeWar Hackathon:} Built a web app to assist farmers with agricultural challenges and weather forecasting.}
+  \resumeSubHeadingListEnd
+
+%-----------VOLUNTEER EXPERIENCE-----------
+\section{Volunteer Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {ACM Student Chapter Lead}{Chitkara University, India}
+      {Community Lead}{Jan 2022 -- Jan 2023}
+      \resumeItemListStart
+        \resumeItem{Conducted technical and soft-skills workshops impacting \textbf{3000+ students}.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Technical Advisor -- Google Developer Student Club}{Chitkara University, India}
+      {Tech Fest Organizer}{Jan 2023 -- Jan 2024}
+      \resumeItemListStart
+        \resumeItem{Organized and delivered developer workshops reaching \textbf{7000+ developers}.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
