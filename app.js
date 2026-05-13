@@ -37,7 +37,7 @@ function buildMarkdownEditor({ value = '', placeholder = 'Write notes in markdow
     <button data-action="bold"    title="Bold (**text**)"         class="md-tool"><strong>B</strong></button>
     <button data-action="italic"  title="Italic (*text*)"         class="md-tool"><em>I</em></button>
     <button data-action="code"    title="Inline code (\`code\`)"  class="md-tool"><code>&lt;/&gt;</code></button>
-    <button data-action="block"   title="Code block"              class="md-tool">```</button>
+    <button data-action="block"   title="Code block"              class="md-tool">&#96;&#96;&#96;</button>
     <button data-action="ul"      title="Bullet list"             class="md-tool">• List</button>
     <button data-action="heading" title="Heading"                 class="md-tool">H</button>
     <button data-action="bold"    title="Separator" class="md-tool-sep"></button>
@@ -216,22 +216,22 @@ document.getElementById('btn-logout').addEventListener('click', () => {
 document.getElementById('btn-sync').addEventListener('click', () => doSave());
 
 // ── Hamburger / mobile sidebar ───────────────────────────────
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('sidebar-open');
+  document.getElementById('sidebar-overlay').classList.add('hidden');
+  document.getElementById('btn-hamburger').setAttribute('aria-expanded', 'false');
+}
+
 (function () {
   const btn     = document.getElementById('btn-hamburger');
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    overlay.classList.add('hidden');
-    btn.setAttribute('aria-expanded', 'false');
-  }
   btn.addEventListener('click', () => {
-    const open = sidebar.classList.toggle('open');
+    const open = sidebar.classList.toggle('sidebar-open');
     overlay.classList.toggle('hidden', !open);
     btn.setAttribute('aria-expanded', String(open));
   });
   overlay.addEventListener('click', closeSidebar);
-  // Close sidebar on day select (mobile)
   document.getElementById('sidebar-list').addEventListener('click', () => {
     if (window.innerWidth < 768) closeSidebar();
   });
@@ -353,7 +353,7 @@ function initApp() {
 // ─── 5. Sidebar ─────────────────────────────────────────────
 
 function renderSidebar() {
-  const sidebar = document.getElementById('sidebar');
+  const sidebar = document.getElementById('sidebar-list');
   sidebar.innerHTML = '';
 
   const weeks = {};
