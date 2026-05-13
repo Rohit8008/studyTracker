@@ -4,10 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="56-Day Interview Prep Tracker — Track your DSA, theory, and review progress day by day.">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PrepTracker">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>56-Day Prep Tracker</title>
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
+
+<noscript>
+  <div style="text-align:center;padding:80px 24px;font-family:sans-serif;background:#0d1117;color:#c9d1d9;min-height:100vh;">
+    <h1 style="font-size:24px;margin-bottom:12px;">JavaScript Required</h1>
+    <p>56-Day Prep Tracker requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+  </div>
+</noscript>
+
+<!-- ── Offline banner ──────────────────────────────────────── -->
+<div id="offline-banner" class="hidden" role="status" aria-live="polite">
+  <span>⚠ You're offline — changes will sync when reconnected</span>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════
      LOGIN SCREEN
@@ -17,9 +34,9 @@
     <h1>56-Day Prep Tracker</h1>
     <p class="login-subtitle">Connect your GitHub repo to sync progress</p>
 
-    <div id="login-error" class="login-error"></div>
+    <div id="login-error" class="login-error" role="alert" aria-live="assertive"></div>
 
-    <form id="login-form">
+    <form id="login-form" novalidate>
       <div class="form-group">
         <label for="input-pat">GitHub Personal Access Token</label>
         <input
@@ -28,6 +45,7 @@
           placeholder="ghp_xxxxxxxxxxxx"
           autocomplete="off"
           required
+          aria-describedby="pat-hint"
         >
       </div>
       <div class="form-group">
@@ -54,7 +72,7 @@
       <button type="submit" class="btn-primary" id="btn-connect">Connect</button>
     </form>
 
-    <p class="login-note">Your PAT is stored only in your browser's localStorage and is never sent anywhere except the GitHub API.</p>
+    <p class="login-note" id="pat-hint">Your PAT is stored only in your browser's localStorage and is never sent anywhere except the GitHub API.</p>
   </div>
 </div>
 
@@ -64,19 +82,18 @@
 <div id="app" class="hidden">
 
   <!-- ── Loading overlay ────────────────────────────────── -->
-  <div id="loading-overlay" class="hidden" style="
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg-primary);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; color: var(--text-secondary);
-    flex-direction: column; gap: 12px;
-  ">
-    <div style="font-size: 28px; animation: spin .8s linear infinite;">⟳</div>
-    <div>Loading progress…</div>
+  <div id="loading-overlay" class="hidden">
+    <div class="loading-spinner">⟳</div>
+    <div class="loading-text">Loading progress…</div>
   </div>
 
   <!-- ── Header ─────────────────────────────────────────── -->
   <header id="app-header">
+    <!-- Mobile hamburger -->
+    <button class="btn-hamburger" id="btn-hamburger" aria-label="Toggle sidebar" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+
     <div class="header-title">
       <span>56-Day Prep</span>
     </div>
@@ -84,7 +101,7 @@
     <div class="header-center">
       <div class="day-counter" id="header-day-info">Day <span>1</span> / 56</div>
       <div class="header-progress-wrap">
-        <div class="progress-bar-outer">
+        <div class="progress-bar-outer" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Overall progress">
           <div class="progress-bar-inner" id="header-progress-bar" style="width:0%"></div>
         </div>
         <div class="progress-pct" id="header-progress-pct">0%</div>
@@ -92,43 +109,60 @@
     </div>
 
     <div class="header-right">
-      <div class="streak-badge" id="header-streak">🔥 0</div>
+      <div class="streak-badge" id="header-streak" title="Current streak">🔥 0</div>
+      <div class="last-synced" id="last-synced" title="Last synced time"></div>
+      <button class="btn-sync" id="btn-sync" title="Sync to GitHub (Ctrl+S)">↑ Sync</button>
       <button class="btn-ghost" id="btn-logout">Logout</button>
     </div>
   </header>
+
+  <!-- ── Sidebar overlay (mobile) ──────────────────────── -->
+  <div id="sidebar-overlay" class="hidden" aria-hidden="true"></div>
 
   <!-- ── App Body ───────────────────────────────────────── -->
   <div id="app-body">
 
     <!-- Sidebar -->
     <nav id="sidebar" aria-label="Day navigation">
-      <!-- Rendered by renderSidebar() -->
+      <!-- Search -->
+      <div class="sidebar-search-wrap">
+        <input
+          type="search"
+          id="sidebar-search"
+          class="sidebar-search"
+          placeholder="Search days…"
+          aria-label="Search days by keyword"
+          autocomplete="off"
+        >
+      </div>
+      <!-- Day list rendered by App.Render.sidebar() -->
+      <div id="sidebar-list"></div>
     </nav>
 
     <!-- Main Content -->
     <main id="main-content">
 
       <!-- Tab Bar -->
-      <div class="tab-bar" role="tablist">
-        <button class="tab-btn active" role="tab" data-tab="today">Today</button>
-        <button class="tab-btn" role="tab" data-tab="problems">All Problems</button>
-        <button class="tab-btn" role="tab" data-tab="patterns">DSA Notes</button>
+      <div class="tab-bar" role="tablist" aria-label="Content tabs">
+        <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="today"    id="tab-today">Today</button>
+        <button class="tab-btn"        role="tab" aria-selected="false" data-tab="problems" id="tab-problems">All Problems</button>
+        <button class="tab-btn"        role="tab" aria-selected="false" data-tab="patterns" id="tab-patterns">DSA Notes</button>
       </div>
 
       <!-- ── TODAY TAB ───────────────────────────────────── -->
-      <div id="day-view" role="tabpanel">
-        <!-- Rendered by renderDayView() -->
+      <div id="day-view" role="tabpanel" aria-labelledby="tab-today">
+        <!-- Rendered by App.Render.dayView() -->
       </div>
 
       <!-- ── ALL PROBLEMS TAB ────────────────────────────── -->
-      <div id="all-problems-view" role="tabpanel" class="hidden">
-        <!-- Rendered by renderAllProblemsTab() -->
+      <div id="all-problems-view" role="tabpanel" aria-labelledby="tab-problems" class="hidden">
+        <!-- Rendered by App.Render.allProblems() -->
       </div>
 
-      <!-- ── DSA NOTES TAB ───────────────────────────────── -->
-      <div id="dsa-notes-view" role="tabpanel" class="hidden">
+      <!-- ── DSA NOTES TAB ──────────────────────────────── -->
+      <div id="dsa-notes-view" role="tabpanel" aria-labelledby="tab-patterns" class="hidden">
         <div id="patterns-grid" class="patterns-grid">
-          <!-- Rendered by renderPatternCards() -->
+          <!-- Rendered by App.Render.patternCards() -->
         </div>
       </div>
 
@@ -138,8 +172,8 @@
   <!-- Save status indicator -->
   <div id="save-status" aria-live="polite"></div>
 
-  <!-- Error toast -->
-  <div id="toast" role="alert"></div>
+  <!-- Toast container — stacking toasts rendered here -->
+  <div id="toast-container" aria-live="assertive" aria-atomic="false"></div>
 
 </div>
 
@@ -147,6 +181,7 @@
      Scripts — load data files first, then app logic
 ════════════════════════════════════════════════════════ -->
 <script src="github-api.js"></script>
+<script src="markdown.js"></script>
 <script src="checklist-data.js"></script>
 <script src="app.js"></script>
 
