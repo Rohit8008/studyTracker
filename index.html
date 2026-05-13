@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="56-Day Interview Prep Tracker — Track your DSA, theory, and review progress day by day.">
+  <title>56-Day Prep Tracker</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>56-Day Prep Tracker</h1>
+    <p class="login-subtitle">Connect your GitHub repo to sync progress</p>
+
+    <div id="login-error" class="login-error"></div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label for="input-pat">GitHub Personal Access Token</label>
+        <input
+          type="password"
+          id="input-pat"
+          placeholder="ghp_xxxxxxxxxxxx"
+          autocomplete="off"
+          required
+        >
+      </div>
+      <div class="form-group">
+        <label for="input-owner">GitHub Username (repo owner)</label>
+        <input
+          type="text"
+          id="input-owner"
+          placeholder="your-github-username"
+          autocomplete="off"
+          required
+        >
+      </div>
+      <div class="form-group">
+        <label for="input-repo">Repository Name</label>
+        <input
+          type="text"
+          id="input-repo"
+          placeholder="100Days"
+          value="100Days"
+          autocomplete="off"
+          required
+        >
+      </div>
+      <button type="submit" class="btn-primary" id="btn-connect">Connect</button>
+    </form>
+
+    <p class="login-note">Your PAT is stored only in your browser's localStorage and is never sent anywhere except the GitHub API.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- ── Loading overlay ────────────────────────────────── -->
+  <div id="loading-overlay" class="hidden" style="
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--text-secondary);
+    flex-direction: column; gap: 12px;
+  ">
+    <div style="font-size: 28px; animation: spin .8s linear infinite;">⟳</div>
+    <div>Loading progress…</div>
+  </div>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header id="app-header">
+    <div class="header-title">
+      <span>56-Day Prep</span>
+    </div>
+
+    <div class="header-center">
+      <div class="day-counter" id="header-day-info">Day <span>1</span> / 56</div>
+      <div class="header-progress-wrap">
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="header-progress-bar" style="width:0%"></div>
+        </div>
+        <div class="progress-pct" id="header-progress-pct">0%</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="streak-badge" id="header-streak">🔥 0</div>
+      <button class="btn-ghost" id="btn-logout">Logout</button>
+    </div>
+  </header>
+
+  <!-- ── App Body ───────────────────────────────────────── -->
+  <div id="app-body">
+
+    <!-- Sidebar -->
+    <nav id="sidebar" aria-label="Day navigation">
+      <!-- Rendered by renderSidebar() -->
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+
+      <!-- Tab Bar -->
+      <div class="tab-bar" role="tablist">
+        <button class="tab-btn active" role="tab" data-tab="today">Today</button>
+        <button class="tab-btn" role="tab" data-tab="problems">All Problems</button>
+        <button class="tab-btn" role="tab" data-tab="patterns">DSA Notes</button>
+      </div>
+
+      <!-- ── TODAY TAB ───────────────────────────────────── -->
+      <div id="day-view" role="tabpanel">
+        <!-- Rendered by renderDayView() -->
+      </div>
+
+      <!-- ── ALL PROBLEMS TAB ────────────────────────────── -->
+      <div id="all-problems-view" role="tabpanel" class="hidden">
+        <!-- Rendered by renderAllProblemsTab() -->
+      </div>
+
+      <!-- ── DSA NOTES TAB ───────────────────────────────── -->
+      <div id="dsa-notes-view" role="tabpanel" class="hidden">
+        <div id="patterns-grid" class="patterns-grid">
+          <!-- Rendered by renderPatternCards() -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Save status indicator -->
+  <div id="save-status" aria-live="polite"></div>
+
+  <!-- Error toast -->
+  <div id="toast" role="alert"></div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     Scripts — load data files first, then app logic
+════════════════════════════════════════════════════════ -->
+<script src="github-api.js"></script>
+<script src="checklist-data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
