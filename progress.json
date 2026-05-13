@@ -4,7 +4,563 @@
     "1": {
       "date": "2026-05-13",
       "completed": {
-        "dsa": ["d1-1", "d1-2", "d1-3", "d1-4", "d1-5"],
+        "dsa": [
+          "d1-1",
+          "d1-2",
+          "d1-3",
+          "d1-4",
+          "d1-5"
+        ],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "2": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "3": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "4": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "5": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "6": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "7": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "8": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "9": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "10": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "11": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "12": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "13": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "14": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "15": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "16": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "17": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "18": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "19": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "20": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "21": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "22": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "23": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "24": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "25": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "26": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "27": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "28": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "29": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "30": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "31": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "32": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "33": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "34": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "35": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "36": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "37": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "38": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "39": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "40": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "41": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "42": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "43": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "44": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "45": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "46": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "47": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "48": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "49": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "50": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "51": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "52": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "53": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "54": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "55": {
+      "date": "",
+      "completed": {
+        "dsa": [],
+        "theory": [],
+        "review": []
+      },
+      "notes": "",
+      "problemNotes": {}
+    },
+    "56": {
+      "date": "",
+      "completed": {
+        "dsa": [],
         "theory": [],
         "review": []
       },
