@@ -13,6 +13,118 @@
 //   9. All Problems Tab
 //  10. DSA Notes Tab
 //  11. Header / Stats
+
+// ─── Markdown Editor Builder ─────────────────────────────────
+// Returns a DOM element: tabbed Write / Preview editor.
+// onChange(value) called whenever the textarea content changes.
+function buildMarkdownEditor({ value = '', placeholder = 'Write notes in markdown…', rows = 5, onChange } = {}) {
+  const wrap = document.createElement('div');
+  wrap.className = 'md-editor';
+
+  // Tab bar
+  const tabBar = document.createElement('div');
+  tabBar.className = 'md-tab-bar';
+  tabBar.innerHTML = `
+    <button class="md-tab active" data-tab="write">Write</button>
+    <button class="md-tab" data-tab="preview">Preview</button>
+    <span class="md-hint">Markdown supported</span>
+  `;
+
+  // Toolbar
+  const toolbar = document.createElement('div');
+  toolbar.className = 'md-toolbar';
+  toolbar.innerHTML = `
+    <button data-action="bold"    title="Bold (**text**)"         class="md-tool"><strong>B</strong></button>
+    <button data-action="italic"  title="Italic (*text*)"         class="md-tool"><em>I</em></button>
+    <button data-action="code"    title="Inline code (\`code\`)"  class="md-tool"><code>&lt;/&gt;</code></button>
+    <button data-action="block"   title="Code block"              class="md-tool">```</button>
+    <button data-action="ul"      title="Bullet list"             class="md-tool">• List</button>
+    <button data-action="heading" title="Heading"                 class="md-tool">H</button>
+    <button data-action="bold"    title="Separator" class="md-tool-sep"></button>
+    <button data-action="quote"   title="Blockquote"             class="md-tool">&gt; Quote</button>
+  `;
+
+  // Textarea (write pane)
+  const ta = document.createElement('textarea');
+  ta.className = 'md-textarea';
+  ta.placeholder = placeholder;
+  ta.value = value;
+  ta.rows = rows;
+  ta.spellcheck = true;
+
+  // Auto-resize
+  const autoResize = () => {
+    ta.style.height = 'auto';
+    ta.style.height = Math.max(ta.scrollHeight, rows * 22) + 'px';
+  };
+  ta.addEventListener('input', () => { autoResize(); if (onChange) onChange(ta.value); });
+  setTimeout(autoResize, 0);
+
+  // Preview pane
+  const preview = document.createElement('div');
+  preview.className = 'md-preview hidden';
+
+  // Tab switching
+  tabBar.querySelectorAll('.md-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBar.querySelectorAll('.md-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      if (tab === 'write') {
+        ta.classList.remove('hidden');
+        toolbar.classList.remove('hidden');
+        preview.classList.add('hidden');
+        ta.focus();
+      } else {
+        ta.classList.add('hidden');
+        toolbar.classList.add('hidden');
+        preview.classList.remove('hidden');
+        preview.innerHTML = renderMarkdown(ta.value) || '<p class="md-empty">Nothing written yet.</p>';
+      }
+    });
+  });
+
+  // Toolbar actions
+  toolbar.querySelectorAll('.md-tool').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const action = btn.dataset.action;
+      const start = ta.selectionStart;
+      const end   = ta.selectionEnd;
+      const sel   = ta.value.slice(start, end);
+      const before = ta.value.slice(0, start);
+      const after  = ta.value.slice(end);
+      let insert = '', cursorOffset = 0;
+
+      switch (action) {
+        case 'bold':    insert = `**${sel || 'bold text'}**`;      cursorOffset = sel ? insert.length : 2; break;
+        case 'italic':  insert = `*${sel || 'italic text'}*`;      cursorOffset = sel ? insert.length : 1; break;
+        case 'code':    insert = `\`${sel || 'code'}\``;           cursorOffset = sel ? insert.length : 1; break;
+        case 'block':   insert = `\`\`\`java\n${sel || '// code here'}\n\`\`\``; cursorOffset = 8; break;
+        case 'ul':      insert = `\n- ${sel || 'item'}\n`;         cursorOffset = 3; break;
+        case 'heading': insert = `\n## ${sel || 'Heading'}\n`;     cursorOffset = 4; break;
+        case 'quote':   insert = `\n> ${sel || 'quote'}\n`;        cursorOffset = 3; break;
+        default: return;
+      }
+
+      ta.value = before + insert + after;
+      ta.selectionStart = ta.selectionEnd = start + (sel ? insert.length : cursorOffset);
+      ta.focus();
+      autoResize();
+      if (onChange) onChange(ta.value);
+    });
+  });
+
+  wrap.appendChild(tabBar);
+  wrap.appendChild(toolbar);
+  wrap.appendChild(ta);
+  wrap.appendChild(preview);
+
+  wrap.getValue = () => ta.value;
+  wrap.setValue = (v) => { ta.value = v; autoResize(); };
+
+  return wrap;
+}
 //  12. Save / GitHub Sync
 //  13. Utilities
 //  14. Bootstrap
@@ -93,12 +205,93 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 });
 
 document.getElementById('btn-logout').addEventListener('click', () => {
+  if (APP.dirty && !confirm('You have unsaved changes. Log out anyway?')) return;
   LS.remove('pat');
   LS.remove('owner');
   LS.remove('repo');
   APP.pat = APP.owner = APP.repo = APP.progress = APP.sha = null;
   showLogin();
 });
+
+document.getElementById('btn-sync').addEventListener('click', () => doSave());
+
+// ── Hamburger / mobile sidebar ───────────────────────────────
+(function () {
+  const btn     = document.getElementById('btn-hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    overlay.classList.toggle('hidden', !open);
+    btn.setAttribute('aria-expanded', String(open));
+  });
+  overlay.addEventListener('click', closeSidebar);
+  // Close sidebar on day select (mobile)
+  document.getElementById('sidebar-list').addEventListener('click', () => {
+    if (window.innerWidth < 768) closeSidebar();
+  });
+})();
+
+// ── Offline detection ────────────────────────────────────────
+(function () {
+  const banner = document.getElementById('offline-banner');
+  function update() { banner.classList.toggle('hidden', navigator.onLine); }
+  window.addEventListener('online',  update);
+  window.addEventListener('offline', update);
+  update();
+})();
+
+// ── Sidebar search ───────────────────────────────────────────
+document.getElementById('sidebar-search').addEventListener('input', function () {
+  const q = this.value.toLowerCase().trim();
+  document.querySelectorAll('.sidebar-day-item').forEach(el => {
+    const text = el.textContent.toLowerCase();
+    el.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+  // Show/hide week headers if all their days are hidden
+  document.querySelectorAll('.sidebar-week').forEach(section => {
+    const anyVisible = [...section.querySelectorAll('.sidebar-day-item')]
+      .some(el => el.style.display !== 'none');
+    section.style.display = anyVisible ? '' : 'none';
+  });
+});
+
+// ── Keyboard shortcuts ───────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  const tag = document.activeElement.tagName;
+  if (tag === 'TEXTAREA' || tag === 'INPUT') return;
+
+  // Ctrl/Cmd + S → sync
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    doSave();
+    return;
+  }
+  // Escape → close any open note panel
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.problem-notes-panel.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.item-note-panel:not(.hidden)').forEach(p => p.classList.add('hidden'));
+    return;
+  }
+  // Arrow keys → navigate days (only on Today tab)
+  if (APP.activeTab !== 'today') return;
+  if (e.key === 'ArrowLeft'  && APP.currentDay > 1)  navigateDay(APP.currentDay - 1);
+  if (e.key === 'ArrowRight' && APP.currentDay < 56) navigateDay(APP.currentDay + 1);
+});
+
+function navigateDay(newDay) {
+  document.querySelectorAll('.sidebar-day-item').forEach(el =>
+    el.classList.toggle('active', parseInt(el.dataset.day) === newDay)
+  );
+  const activeEl = document.querySelector(`.sidebar-day-item[data-day="${newDay}"]`);
+  if (activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+  renderDayView(newDay);
+}
 
 // ─── 4. Progress Loading & Init ──────────────────────────────
 
@@ -427,24 +620,25 @@ function buildChecklistCard(title, type, items, dp) {
     const notePanel = document.createElement('div');
     notePanel.className = 'item-note-panel hidden';
 
-    const ta = document.createElement('textarea');
-    ta.className = 'item-note-textarea';
-    ta.placeholder = 'Write your notes, key insights, or questions here…';
-    ta.value = savedNote;
-    ta.rows = 3;
+    const mdEditor = buildMarkdownEditor({
+      value:       savedNote,
+      placeholder: 'Write your notes, key insights, or questions here…',
+      rows:        4,
+    });
+    notePanel.appendChild(mdEditor);
 
     const saveBtn = document.createElement('button');
     saveBtn.className = 'item-note-save';
     saveBtn.textContent = 'Save note';
 
     saveBtn.addEventListener('click', () => {
-      dp.itemNotes[item.id] = ta.value.trim();
-      noteBtn.textContent = ta.value.trim() ? '📝' : '+ note';
+      const val = mdEditor.getValue().trim();
+      dp.itemNotes[item.id] = val;
+      noteBtn.textContent = val ? '📝' : '+ note';
       notePanel.classList.add('hidden');
       scheduleSave();
     });
 
-    notePanel.appendChild(ta);
     notePanel.appendChild(saveBtn);
     wrapper.appendChild(notePanel);
 
@@ -470,14 +664,13 @@ function buildDayNotesCard(dayNum, dp) {
   header.innerHTML = '<h3>Day Notes</h3>';
   card.appendChild(header);
 
-  const ta = document.createElement('textarea');
-  ta.placeholder = 'Add notes for today — key insights, what felt hard, patterns discovered…';
-  ta.value = dp.notes || '';
-  ta.addEventListener('input', () => {
-    dp.notes = ta.value;
-    scheduleSave();
+  const editor = buildMarkdownEditor({
+    value:       dp.notes || '',
+    placeholder: 'Add notes for today — key insights, what felt hard, patterns discovered…\n\n## What I learned\n\n## What was hard\n\n## Tomorrow\'s focus',
+    rows:        8,
+    onChange:    (val) => { dp.notes = val; scheduleSave(); },
   });
-  card.appendChild(ta);
+  card.appendChild(editor);
 
   return card;
 }
@@ -614,11 +807,20 @@ function buildNotesPanel(problem, dp, dayNum) {
       </div>
     </div>
     <div class="notes-textarea-wrap">
-      <label style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;">Note</label>
-      <textarea id="np-text-${problem.id}" placeholder="Key insight, pattern observation, edge cases…" rows="3">${esc(pNote.noteText || '')}</textarea>
+      <label style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Note</label>
+      <div id="np-editor-${problem.id}"></div>
     </div>
     <button class="btn-save-notes" data-id="${problem.id}" data-day="${dayNum}">Save Notes</button>
   `;
+
+  // Mount markdown editor for the note field
+  const editorSlot = panel.querySelector(`#np-editor-${problem.id}`);
+  const mdEditor = buildMarkdownEditor({
+    value:       pNote.noteText || '',
+    placeholder: 'Key insight, pattern, edge cases, approach…\n\n**Approach:**\n\n**Time complexity:**\n\n**Space complexity:**',
+    rows:        4,
+  });
+  editorSlot.appendChild(mdEditor);
 
   // Review button selection
   panel.querySelectorAll('.review-btn').forEach(btn => {
@@ -646,7 +848,8 @@ function saveNotesPanel(problemId, dayNum, dp) {
   const panel    = document.getElementById(`notes-panel-${problemId}`);
   const pattern  = document.getElementById(`np-pattern-${problemId}`)?.value.trim() || '';
   const timeMin  = parseInt(document.getElementById(`np-time-${problemId}`)?.value) || 0;
-  const noteText = document.getElementById(`np-text-${problemId}`)?.value.trim() || '';
+  const editorEl = document.querySelector(`#np-editor-${problemId} .md-editor`);
+  const noteText = editorEl?.getValue?.() || '';
   const selBtn   = panel?.querySelector('.review-btn.selected');
   const review   = selBtn?.dataset.val || '';
 
@@ -887,40 +1090,90 @@ function calcStreak(todayDay) {
 // ─── 12. Save / GitHub Sync ──────────────────────────────────
 
 function scheduleSave() {
-  clearTimeout(APP.saveTimer);
-  showSaveStatus('saving');
-  APP.saveTimer = setTimeout(() => doSave(), 1200);
+  // Mark unsaved changes locally — actual commit happens on manual Sync
+  APP.dirty = true;
+  showSaveStatus('unsaved');
+}
+
+function buildCommitMessage() {
+  const day = APP.currentDay;
+  const dp  = APP.progress.days[String(day)];
+  if (!dp) return `progress: day ${day} updated`;
+  const dsaDone    = dp.completed.dsa.length;
+  const theoryDone = dp.completed.theory.length;
+  const reviewDone = dp.completed.review.length;
+  const parts = [];
+  if (dsaDone)    parts.push(`${dsaDone} DSA`);
+  if (theoryDone) parts.push(`${theoryDone} theory`);
+  if (reviewDone) parts.push(`${reviewDone} review`);
+  const summary = parts.length ? parts.join(', ') : 'notes';
+  return `progress: day ${day} — ${summary}`;
 }
 
 async function doSave() {
+  if (!APP.pat || !APP.progress) return;
+  if (!APP.dirty) { showToast('Nothing new to sync.'); return; }
+  const btn = document.getElementById('btn-sync');
+  btn.disabled = true;
+  btn.textContent = '↑ Syncing…';
   try {
-    const newSha = await saveProgress(APP.owner, APP.repo, APP.pat, APP.progress, APP.sha);
-    APP.sha = newSha;
-    showSaveStatus('saved');
-    setTimeout(() => hideSaveStatus(), 2000);
-  } catch (err) {
+    const msg    = buildCommitMessage();
+    const newSha = await saveProgress(APP.owner, APP.repo, APP.pat, APP.progress, APP.sha, msg);
+    APP.sha   = newSha;
+    APP.dirty = false;
+    btn.textContent = '✓ Synced';
     hideSaveStatus();
-    showToast('Could not save — check your PAT or internet connection');
+    updateLastSynced();
+    showToast('Progress synced to GitHub', 'success');
+    setTimeout(() => { btn.textContent = '↑ Sync'; btn.disabled = false; }, 2000);
+  } catch (err) {
+    btn.textContent = '↑ Sync';
+    btn.disabled = false;
+    showToast('Sync failed — check your PAT or internet connection', 'error');
     console.error('Save error:', err);
   }
 }
 
+// Auto-sync every 12 hours if there are unsaved changes
+setInterval(() => { if (APP.dirty) doSave(); }, 12 * 60 * 60 * 1000);
+
 function showSaveStatus(state) {
   const el = document.getElementById('save-status');
   el.className = `saving ${state}`;
-  el.innerHTML = state === 'saving'
-    ? `<span style="animation:spin .8s linear infinite;display:inline-block">⟳</span> Saving…`
-    : `✓ Saved`;
+  el.innerHTML = state === 'unsaved' ? '● Unsaved changes' : '';
 }
 function hideSaveStatus() {
   document.getElementById('save-status').className = '';
+  document.getElementById('save-status').innerHTML = '';
 }
 
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 4000);
+// ── Toast system (stacking, typed) ──────────────────────────
+function showToast(msg, type) {
+  type = type || 'info'; // 'success' | 'error' | 'info'
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.setAttribute('role', 'alert');
+  const icons = { success: '✓', error: '✕', info: 'ℹ' };
+  toast.innerHTML = `<span class="toast-icon">${icons[type] || icons.info}</span><span class="toast-msg">${esc(msg)}</span><button class="toast-close" aria-label="Dismiss">×</button>`;
+  toast.querySelector('.toast-close').addEventListener('click', () => dismissToast(toast));
+  container.appendChild(toast);
+  // Animate in
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => dismissToast(toast), 4000);
+}
+function dismissToast(toast) {
+  toast.classList.remove('show');
+  toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+}
+
+// ── Last-synced timestamp ────────────────────────────────────
+function updateLastSynced() {
+  const el = document.getElementById('last-synced');
+  if (!el) return;
+  const now = new Date();
+  el.textContent = 'Synced ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  el.title = 'Last synced at ' + now.toLocaleString();
 }
 
 // ─── 13. Utilities ───────────────────────────────────────────
